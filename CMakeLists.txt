@@ -3,18 +3,26 @@ cmake_minimum_required (VERSION 3.8)
 
 project ("primus-engine")
 
-# Add source to this project's executable.
+# add source to this project's executable
+file(GLOB primus_engine__src CONFIGURE_DEPENDS "src/*.h" "src/*.cpp")
+
 add_executable (primus-engine 
-  src/main.cpp
+  ${primus_engine__src}
 )
 
-# GLFW setup
+# glfw setup
 set (GLFW_BUILD_DOCS OFF CACHE BOOL "GLFW lib only")
 set (GLFW_INSTALL OFF CACHE BOOL "GLFW lib only")
 
 add_subdirectory (dependencies/glfw)
 
+# json setup
+set(JSON_BuildTests OFF CACHE INTERNAL "")
+
+add_subdirectory(dependencies/json)
+
 # Dependencies
 target_link_libraries (primus-engine 
-  glfw 
+  glfw
+  nlohmann_json::nlohmann_json
 )

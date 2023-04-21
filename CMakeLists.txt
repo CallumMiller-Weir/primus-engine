@@ -3,11 +3,24 @@ cmake_minimum_required (VERSION 3.8)
 
 project ("primus-engine")
 
-# add source to this project's executable
-file(GLOB primus_engine__src CONFIGURE_DEPENDS "src/*.h" "src/*.cpp")
+# package-management
+file(GLOB primus_engine__package CONFIGURE_DEPENDS 
+  "src/package/package.h" 
+  "src/package/package.cpp" 
+  "src/package/repository.h" 
+  "src/package/repository.cpp"
+)
+
+# utility
+file(GLOB primus_engine__utility CONFIGURE_DEPENDS 
+  "src/utility/format.h" 
+  "src/utility/format.cpp"
+)
 
 add_executable (primus-engine 
-  ${primus_engine__src}
+  "src/main.cpp"
+  ${primus_engine__package}
+  ${primus_engine__utility}
 )
 
 # glfw setup

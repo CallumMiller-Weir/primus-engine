@@ -15,7 +15,7 @@ namespace primus
      * https://shorturl.at/evLN0
      */
     template<typename T>
-    void format_helper(std::ostringstream& oss, std::string_view& str, const T& value)
+    void format_helper(std::ostringstream &oss, std::string_view &str, const T &value)
     {
         std::size_t openBracket = str.find('{');
         if (openBracket == std::string::npos) 

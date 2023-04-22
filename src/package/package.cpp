@@ -1,27 +1,44 @@
 #include "package.h"
+#include <iostream>
 
 namespace primus
 {
-    Package::Package(const std::string& name, const json& properties)
-        : m_name(name), m_properties(properties)
+    Package::Package(const json& properties)
+        : m_properties(properties)
     {
-        m_properties["package-id"] = name;
+    }
+
+    std::string Package::listProperties()
+    {
+        std::string propertyList = "";
+        for (auto it = m_properties.begin(); it != m_properties.end(); it++)
+        {
+            std::string propertyName = it.key();
+            auto propertyValue = m_properties[propertyName];
+            std::string property = primus::format("{} - {}: {}{}", INDENT, propertyName, propertyValue, LINE_BREAK);
+            propertyList += property;
+        }
+
+        return propertyList;
     }
 
     Package *Package::empty(const std::string& name) 
     {
         json properties;
-        properties["package-empty"] = true;
-        return new Package(name, properties);
+        properties["package-id"] = name;
+        return new Package(properties);
     }
 
     Package *Package::fromJSON(const std::string& jsonStr)
     {
         json properties = json::parse(jsonStr);
-        properties["package-empty"] = false;
+        if (properties.find("package-id") == properties.end())
+        {
+            throw std::invalid_argument("Package must contain 'package-id' field");
+        }
 
         std::string name = properties["package-id"];
-        return new Package(name, properties);
+        return new Package(properties);
     }
 
     Package *Package::fromFile(const std::string& filename)
@@ -34,9 +51,12 @@ namespace primus
         }
 
         json properties = json::parse(file);
-        properties["package-empty"] = false;
+        if (properties.find("package-id") == properties.end())
+        {
+            throw std::invalid_argument("Package must contain 'package-id' field");
+        }
 
         std::string name = properties["package-id"];
-        return new Package(name, properties);
+        return new Package(properties);
     }
 }

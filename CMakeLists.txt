@@ -15,6 +15,8 @@ file(GLOB primus_engine__package CONFIGURE_DEPENDS
 file(GLOB primus_engine__utility CONFIGURE_DEPENDS 
   "src/utility/format.h" 
   "src/utility/format.cpp"
+  "src/utility/logger.h" 
+  "src/utility/logger.cpp"
 )
 
 add_executable (primus-engine 

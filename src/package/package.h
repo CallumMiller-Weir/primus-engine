@@ -4,6 +4,7 @@
 #include <string>
 #include <fstream>
 #include <nlohmann/json.hpp>
+#include "../utility/logger.h"
 #include "../utility/format.h"
 
 namespace primus
@@ -13,13 +14,12 @@ namespace primus
     class Package 
     {
     private:
-        std::string m_name;
         json m_properties;
     public:
-        Package(const std::string& name, const json& properties);
+        Package(const json &properties);
 
         template<typename T> 
-        T getProperty(const std::string propertyName)
+        T getProperty(const std::string &propertyName)
         {
             if (m_properties.find(propertyName) == m_properties.end())
             {
@@ -30,9 +30,13 @@ namespace primus
             return m_properties[propertyName];
         }
 
-        static Package *empty(const std::string& name);
-        static Package *fromJSON(const std::string& jsonStr);
-        static Package *fromFile(const std::string& filename);
+        std::string listProperties();
+
+        bool isEmpty();
+
+        static Package *empty(const std::string &name);
+        static Package *fromJSON(const std::string &jsonStr);
+        static Package *fromFile(const std::string &filename);
     };
 }
 

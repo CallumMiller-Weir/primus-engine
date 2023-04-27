@@ -50,8 +50,7 @@ namespace primus
          *
          * @param properties a JSON object
          *
-         * @warning usage of this constructor is not recommended as there it does not enforce the following mandatory properties:
-         * - package-id: the name of the package
+         * @throws std::runtime_error if propertyId does not belong to an existing property.
          */
         Package(const json &properties);
 
@@ -60,15 +59,15 @@ namespace primus
          *
          * @param propertyId the name of the sought property
          * 
-         * @throws std::invalid_argument if propertyId does not belong to an existing property.
+         * @throws std::runtime_error if propertyId does not belong to an existing property.
          */
         template<typename T> 
         const T getProperty(const std::string &propertyId)
         {
-            if (m_properties.find(propertyId) == m_properties.end())
+            if (!m_properties.contains(propertyId))
             {
                 std::string error = primus::format("Could not find property with id '{}'", propertyId);
-                throw std::invalid_argument(error);
+                throw std::runtime_error(error);
             }
 
             return m_properties[propertyId];
@@ -80,20 +79,20 @@ namespace primus
          * @param propertyId the name of the sought property
          * @param value the proposed new value for the sought property
          * 
-         * @throws std::invalid_argument if propertyId does not belong to an existing property.
+         * @throws std::runtime_error if propertyId does not belong to an existing property.
          */
         template<typename T>
         void setProperty(const std::string &propertyId, const T& value)
         {
-            if (m_properties.find(propertyId) == m_properties.end())
-            {
-                std::string error = primus::format("Could not find property with id '{}'", propertyId);
-                throw std::invalid_argument(error);
-            }
-
             if (propertyId == PROPERTY__PACKAGE_ID)
             {
-                throw std::invalid_argument("Cannot set property 'package-id'");
+                throw std::runtime_error("Cannot set property 'package-id'");
+            }
+
+            if (!m_properties.contains(propertyId))
+            {
+                std::string error = primus::format("Could not find property with id '{}'", propertyId);
+                throw std::runtime_error(error);
             }
 
             m_properties[propertyId] = value;
@@ -115,20 +114,17 @@ namespace primus
          * Creates a package from a JSON string.
          *
          * @param jsonStr a string containing a JSON object.
-         * 
-         * @throws std::invalid_argument if propertyId does not belong to an existing property.
          */
         static Package *fromJSON(const std::string &jsonStr);
 
         /*
          * Creates a package from a JSON file.
          *
-         * @param filename the name of the JSON file.
+         * @param filePath the path to the JSON file.
          * 
-         * @throws std::ifstream::failure if filename does not belong to an existing file.
-         * @throws std::invalid_argument if propertyId does not belong to an existing property.
+         * @throws std::ifstream::failure if filePath does not belong to an existing file.
          */
-        static Package *fromFile(const std::string &filename);
+        static Package *fromFile(const std::filesystem::path &filePath);
     };
 }
 

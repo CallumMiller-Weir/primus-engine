@@ -27,24 +27,25 @@
 
 using namespace primus;
 
-int main(int argc, char** argv) {
+int main(int argc, char** argv)
+{
     Repository *repo = Repository::empty("repo/");
     repo->addPackage(Package::fromJSON(
         R"(
-        {
-            "package-id": "package",
-            "happy": false
-        }
+            {
+                "package-id": "package",
+                "happy": false
+            }
         )"
     ));
 
     Repository *child = Repository::empty("repo/child/");
     child->addPackage(Package::fromJSON(
         R"(
-        {
-            "package-id": "package",
-            "happy": true
-        }
+            {
+                "package-id": "package",
+                "happy": true
+            }
         )"
     ));
 

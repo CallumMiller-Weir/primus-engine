@@ -60,7 +60,7 @@ namespace primus
          *
          * @param packageId the name of an existing package to remove.
          * 
-         * @throws std::invalid_argument if packageId does not belong to an existing package.
+         * @throws std::runtime_error if packageId does not belong to an existing package.
          */
         void removePackage(const std::string &packageId);
 
@@ -69,7 +69,7 @@ namespace primus
          *
          * @param packageId the id of the sought package.
          *
-         * @throws std::invalid_argument if packageId does not belong to a package in the repository.
+         * @throws std::runtime_error if packageId does not belong to a package in the repository.
          */
         Package *findPackage(const std::string &packageId);
 
@@ -87,7 +87,7 @@ namespace primus
          *
          * @param repositoryName the name of an existing repository.
          * 
-         * @throws std::invalid_argument if repositoryName does not belong to a child of the repository.
+         * @throws std::runtime_error if repositoryName does not belong to a child of the repository.
          */
         Repository *findRepository(const std::string &repositoryName);
 

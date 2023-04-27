@@ -4,3 +4,6 @@
 [submodule "dependencies/json"]
 	path = dependencies/json
 	url = https://github.com/nlohmann/json.git
+[submodule "dependencies/vulkan"]
+	path = dependencies/vulkan
+	url = https://github.com/KhronosGroup/Vulkan-Headers.git

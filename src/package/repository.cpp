@@ -48,7 +48,7 @@ namespace primus
         if (m_packages.find(packageId) == m_packages.end())
         {
             std::string error = primus::format("Could not find package with id '{}'", packageId);
-            throw std::invalid_argument(error);
+            throw std::runtime_error(error);
         }
 
         m_packages.erase(packageId);
@@ -59,7 +59,7 @@ namespace primus
         if (m_packages.find(packageId) == m_packages.end())
         {
             std::string error = primus::format("Could not find package with id '{}'", packageId);
-            throw std::invalid_argument(error);
+            throw std::runtime_error(error);
         }
 
         return m_packages[packageId];
@@ -81,7 +81,7 @@ namespace primus
         if (m_children.find(repositoryName) == m_children.end())
         {
             std::string error = primus::format("Could not find child repository with name '{}'", repositoryName);
-            throw std::invalid_argument(error);
+            throw std::runtime_error(error);
         }
 
         return m_children[repositoryName];

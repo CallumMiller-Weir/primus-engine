@@ -31,13 +31,17 @@ set (GLFW_INSTALL OFF CACHE BOOL "GLFW lib only")
 
 add_subdirectory (dependencies/glfw)
 
+# vulkan setup
+add_subdirectory (dependencies/vulkan)
+
 # json setup
 set(JSON_BuildTests OFF CACHE INTERNAL "")
 
 add_subdirectory(dependencies/json)
 
 # Dependencies
-target_link_libraries (primus-engine 
+target_link_libraries (primus-engine
+  Vulkan::Headers
   glfw
   nlohmann_json::nlohmann_json
 )

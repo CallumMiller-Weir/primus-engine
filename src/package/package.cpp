@@ -27,9 +27,13 @@
 
 namespace primus
 {
-    Package::Package(const json& properties)
+    Package::Package(const json &properties)
         : m_properties(properties)
     {
+        if (!m_properties.contains(PROPERTY__PACKAGE_ID))
+        {
+            throw std::runtime_error("Package must contain 'package-id' field");
+        }
     }
 
     const std::string Package::list()
@@ -49,41 +53,29 @@ namespace primus
         return propertyList;
     }
 
-    Package *Package::empty(const std::string& name) 
+    Package *Package::empty(const std::string &name) 
     {
         json properties;
         properties[PROPERTY__PACKAGE_ID] = name;
         return new Package(properties);
     }
 
-    Package *Package::fromJSON(const std::string& jsonStr)
+    Package *Package::fromJSON(const std::string &jsonStr)
     {
         json properties = json::parse(jsonStr);
-        if (properties.find(PROPERTY__PACKAGE_ID) == properties.end())
-        {
-            throw std::invalid_argument("Package must contain 'package-id' field");
-        }
-
-        std::string name = properties[PROPERTY__PACKAGE_ID];
         return new Package(properties);
     }
 
-    Package *Package::fromFile(const std::string& filename)
+    Package *Package::fromFile(const std::filesystem::path &filePath)
     {
-        std::ifstream file(filename);
+        std::ifstream file(filePath);
         if (!file)
         {
-            std::string error = primus::format("Could not open file '{}'", filename);
+            std::string error = primus::format("Could not open file '{}'", filePath.c_str());
             throw std::ifstream::failure(error);
         }
 
         json properties = json::parse(file);
-        if (properties.find(PROPERTY__PACKAGE_ID) == properties.end())
-        {
-            throw std::invalid_argument("Package must contain 'package-id' field");
-        }
-
-        std::string name = properties[PROPERTY__PACKAGE_ID];
         return new Package(properties);
     }
 }

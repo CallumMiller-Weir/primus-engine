@@ -3,11 +3,26 @@ cmake_minimum_required (VERSION 3.8)
 
 project ("primus-engine")
 
-# add source to this project's executable
-file(GLOB primus_engine__src CONFIGURE_DEPENDS "src/*.h" "src/*.cpp")
+# package-management
+file(GLOB primus_engine__package CONFIGURE_DEPENDS 
+  "src/package/package.h" 
+  "src/package/package.cpp" 
+  "src/package/repository.h" 
+  "src/package/repository.cpp"
+)
+
+# utility
+file(GLOB primus_engine__utility CONFIGURE_DEPENDS 
+  "src/utility/format.h" 
+  "src/utility/format.cpp"
+  "src/utility/logger.h" 
+  "src/utility/logger.cpp"
+)
 
 add_executable (primus-engine 
-  ${primus_engine__src}
+  "src/main.cpp"
+  ${primus_engine__package}
+  ${primus_engine__utility}
 )
 
 # glfw setup
@@ -16,13 +31,17 @@ set (GLFW_INSTALL OFF CACHE BOOL "GLFW lib only")
 
 add_subdirectory (dependencies/glfw)
 
+# vulkan setup
+add_subdirectory (dependencies/vulkan)
+
 # json setup
 set(JSON_BuildTests OFF CACHE INTERNAL "")
 
 add_subdirectory(dependencies/json)
 
 # Dependencies
-target_link_libraries (primus-engine 
+target_link_libraries (primus-engine
+  Vulkan::Headers
   glfw
   nlohmann_json::nlohmann_json
 )

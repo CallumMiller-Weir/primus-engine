@@ -38,11 +38,11 @@ namespace primus
     class Repository
     {
     private:
-        std::string m_name;
-        std::unordered_map<std::string, Package *> m_packages;
+        std::string mName;
+        std::unordered_map<std::string, Package *> mPackages;
 
-        Repository *m_parent;
-        std::unordered_map<std::string, Repository *> m_children;
+        Repository *mParent;
+        std::unordered_map<std::string, Repository *> mChildren;
     public:
         Repository(const std::string &name, Repository *parent = nullptr);
 
@@ -110,9 +110,9 @@ namespace primus
          */
         static Repository *fromDirectory(const std::string &path);
 
-        const std::string &getName() { return m_name; }
+        const std::string &getName() { return mName; }
 
-        const Repository *getParent() { return m_parent; }
+        const Repository *getParent() { return mParent; }
     };
 }
 

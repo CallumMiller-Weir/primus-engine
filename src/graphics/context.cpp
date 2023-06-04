@@ -22,17 +22,33 @@
     @author Callum Miller-Weir
  */
 
-#include "graphics/context.h"
+#include "context.h"
 
-using namespace primus;
-
-int main(int argc, char **argv)
+namespace primus
 {
-    Package *pkg = Package::empty("graphicsContext");
-    pkg->setProperty("application-name", "primus-engine");
+    Context::Context(Package *contextConfig)
+        : mContextConfig(contextConfig)
+    {
+    }
 
-    Context *cxt = new Context(pkg);
-    cxt->init();
+    bool Context::init()
+    {
+        try
+        {
+            vk::ApplicationInfo applicationInfo = {};
+            applicationInfo.setPApplicationName(mContextConfig->getProperty<std::string>("application-name").c_str());
 
-    return 0;
+            vk::InstanceCreateInfo instanceCreateInfo = {};
+            instanceCreateInfo.pApplicationInfo = &applicationInfo;
+
+            mInstance = vk::createInstance(instanceCreateInfo);
+        } 
+        catch (const std::exception &e)
+        {
+            //TODO: error logging
+            return false;
+        }
+
+        return true;
+    }
 }

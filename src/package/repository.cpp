@@ -28,7 +28,7 @@
 namespace primus
 {
     Repository::Repository(const std::string &name, Repository *parent)
-        : m_name(name), m_parent(parent)
+        : mName(name), mParent(parent)
     {
     }
 
@@ -40,29 +40,29 @@ namespace primus
         }
 
         std::string packageId = package->getProperty<std::string>(PROPERTY__PACKAGE_ID);
-        m_packages.insert(std::pair<std::string, Package *>(packageId, package));
+        mPackages.insert(std::pair<std::string, Package *>(packageId, package));
     }
 
     void Repository::removePackage(const std::string &packageId)
     {
-        if (m_packages.find(packageId) == m_packages.end())
+        if (mPackages.find(packageId) == mPackages.end())
         {
             std::string error = primus::format("Could not find package with id '{}'", packageId);
             throw std::runtime_error(error);
         }
 
-        m_packages.erase(packageId);
+        mPackages.erase(packageId);
     }
 
     Package *Repository::findPackage(const std::string &packageId)
     {
-        if (m_packages.find(packageId) == m_packages.end())
+        if (mPackages.find(packageId) == mPackages.end())
         {
             std::string error = primus::format("Could not find package with id '{}'", packageId);
             throw std::runtime_error(error);
         }
 
-        return m_packages[packageId];
+        return mPackages[packageId];
     }
 
     void Repository::addRepository(Repository *child)
@@ -72,26 +72,26 @@ namespace primus
             throw std::invalid_argument("Child Repository cannot be null");
         }
 
-        child->m_parent = this;
-        m_children.insert(std::pair<std::string, Repository *>(child->getName(), child));
+        child->mParent = this;
+        mChildren.insert(std::pair<std::string, Repository *>(child->getName(), child));
     }
 
     Repository *Repository::findRepository(const std::string &repositoryName)
     {
-        if (m_children.find(repositoryName) == m_children.end())
+        if (mChildren.find(repositoryName) == mChildren.end())
         {
             std::string error = primus::format("Could not find child repository with name '{}'", repositoryName);
             throw std::runtime_error(error);
         }
 
-        return m_children[repositoryName];
+        return mChildren[repositoryName];
     }
 
     const std::string Repository::list()
     {
         int index = 1;
-        std::string packageList = primus::format("repository '{}'{}", m_name, LINE_BREAK);
-        for (auto it = m_packages.begin(); it != m_packages.end(); ++it)
+        std::string packageList = primus::format("repository '{}'{}", mName, LINE_BREAK);
+        for (auto it = mPackages.begin(); it != mPackages.end(); ++it)
         {
             Package *package = it->second;
             packageList += primus::format("{}{}. package '{}'{}", 
@@ -102,7 +102,7 @@ namespace primus
             packageList += package->list();
         }
 
-        for (auto it : m_children)
+        for (auto it : mChildren)
         {
             Repository *child = it.second;
             packageList += child->list();

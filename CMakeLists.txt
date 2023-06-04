@@ -1,7 +1,13 @@
 ﻿# CMakeList.txt
-cmake_minimum_required (VERSION 3.8)
+cmake_minimum_required (VERSION 3.12)
 
 project ("primus-engine")
+
+# graphics
+file(GLOB primus_engine__graphics CONFIGURE_DEPENDS 
+  "src/graphics/context.h" 
+  "src/graphics/context.cpp"
+)
 
 # package-management
 file(GLOB primus_engine__package CONFIGURE_DEPENDS 
@@ -21,6 +27,7 @@ file(GLOB primus_engine__utility CONFIGURE_DEPENDS
 
 add_executable (primus-engine 
   "src/main.cpp"
+  ${primus_engine__graphics}
   ${primus_engine__package}
   ${primus_engine__utility}
 )
@@ -32,7 +39,7 @@ set (GLFW_INSTALL OFF CACHE BOOL "GLFW lib only")
 add_subdirectory (dependencies/glfw)
 
 # vulkan setup
-add_subdirectory (dependencies/vulkan)
+find_package(Vulkan REQUIRED)
 
 # json setup
 set(JSON_BuildTests OFF CACHE INTERNAL "")
@@ -41,7 +48,7 @@ add_subdirectory(dependencies/json)
 
 # Dependencies
 target_link_libraries (primus-engine
-  Vulkan::Headers
+  Vulkan::Vulkan
   glfw
   nlohmann_json::nlohmann_json
 )

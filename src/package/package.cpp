@@ -28,9 +28,9 @@
 namespace primus
 {
     Package::Package(const json &properties)
-        : m_properties(properties)
+        : mProperties(properties)
     {
-        if (!m_properties.contains(PROPERTY__PACKAGE_ID))
+        if (!mProperties.contains(PROPERTY__PACKAGE_ID))
         {
             throw std::runtime_error("Package must contain 'package-id' field");
         }
@@ -39,12 +39,12 @@ namespace primus
     const std::string Package::list()
     {
         std::string propertyList = "";
-        for (auto it = m_properties.begin(); it != m_properties.end(); it++)
+        for (auto it = mProperties.begin(); it != mProperties.end(); it++)
         {
             std::string propertyName = it.key();
             if (propertyName != PROPERTY__PACKAGE_ID) 
             {
-                auto propertyValue = m_properties[propertyName];
+                auto propertyValue = mProperties[propertyName];
                 std::string property = primus::format("{} - {}: {}{}", INDENT, propertyName, propertyValue, LINE_BREAK);
                 propertyList += property;
             }

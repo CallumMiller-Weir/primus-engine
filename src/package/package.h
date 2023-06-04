@@ -43,7 +43,7 @@ namespace primus
     class Package 
     {
     private:
-        json m_properties;
+        json mProperties;
     public:
         /*
          * Package constructor.
@@ -64,13 +64,13 @@ namespace primus
         template<typename T> 
         const T getProperty(const std::string &propertyId)
         {
-            if (!m_properties.contains(propertyId))
+            if (!mProperties.contains(propertyId))
             {
                 std::string error = primus::format("Could not find property with id '{}'", propertyId);
                 throw std::runtime_error(error);
             }
 
-            return m_properties[propertyId];
+            return mProperties[propertyId];
         }
 
         /*
@@ -89,13 +89,7 @@ namespace primus
                 throw std::runtime_error("Cannot set property 'package-id'");
             }
 
-            if (!m_properties.contains(propertyId))
-            {
-                std::string error = primus::format("Could not find property with id '{}'", propertyId);
-                throw std::runtime_error(error);
-            }
-
-            m_properties[propertyId] = value;
+            mProperties[propertyId] = value;
         }
 
         /*

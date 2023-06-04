@@ -22,17 +22,23 @@
     @author Callum Miller-Weir
  */
 
-#include "graphics/context.h"
+#ifndef CONTEXT_HEADER
+#define CONTEXT_HEADER
 
-using namespace primus;
+#include <vulkan/vulkan.hpp>
+#include "../package/repository.h"
 
-int main(int argc, char **argv)
+namespace primus
 {
-    Package *pkg = Package::empty("graphicsContext");
-    pkg->setProperty("application-name", "primus-engine");
-
-    Context *cxt = new Context(pkg);
-    cxt->init();
-
-    return 0;
+    class Context
+    {
+    private:
+        Package *mContextConfig;
+        vk::Instance mInstance;
+    public:
+        Context(Package *contextConfig);
+        bool init();
+    };
 }
+
+#endif //CONTEXT_HEADER
